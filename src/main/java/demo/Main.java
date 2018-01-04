@@ -1,21 +1,21 @@
 package demo;
 
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
+@Slf4j
 public class Main {
 
-    private static final Logger log = LoggerFactory.getLogger(Main.class);
-
     public static void main(String... args) throws Exception {
-        OkHttpClient client = new OkHttpClient();
 
-        String url = "https://example.com/";
+    }
 
+    private void doHttpGet(OkHttpClient client, String url) throws IOException {
         Request request = new Request.Builder()
                 .url(url)
                 .build();
