@@ -81,7 +81,7 @@ public class CreateJobRequest {
         public CreateJobResponse execute() {
             CreateJobRequest request = new CreateJobRequest(this);
 
-            return requester.post(url, request, CreateJobResponse.class);
+            return requester.postMultiPart(url, request, CreateJobResponse.class);
         }
     }
 }
