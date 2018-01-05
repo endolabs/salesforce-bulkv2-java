@@ -3,16 +3,14 @@ package bulk2j.request;
 import bulk2j.RestRequester;
 import bulk2j.response.GetAllJobsResponse;
 import bulk2j.type.ConcurrencyModeEnum;
+import bulk2j.type.JobTypeEnum;
 import lombok.Value;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Value
 public class GetAllJobsRequest {
-
-    private final ConcurrencyModeEnum concurrencyMode;
-
-    private GetAllJobsRequest(Builder builder) {
-        this.concurrencyMode = builder.concurrencyMode;
-    }
 
     public static class Builder {
 
@@ -20,7 +18,15 @@ public class GetAllJobsRequest {
 
         private final String url;
 
+        // parameters
+
         private ConcurrencyModeEnum concurrencyMode;
+
+        private boolean isPkChunkingEnabled;
+
+        private JobTypeEnum jobType;
+
+        private String queryLocator;
 
         public Builder(RestRequester requester, String url) {
             this.requester = requester;
@@ -32,8 +38,37 @@ public class GetAllJobsRequest {
             return this;
         }
 
+        public Builder pkChunkingEnabled() {
+            this.isPkChunkingEnabled = true;
+            return this;
+        }
+
+        public Builder withJobType(JobTypeEnum jobType) {
+            this.jobType = jobType;
+            return this;
+        }
+
+        public Builder withQueryLocator(String queryLocator) {
+            this.queryLocator = queryLocator;
+            return this;
+        }
+
         public GetAllJobsResponse execute() {
-            return requester.get(url, GetAllJobsResponse.class);
+            Map<String, String> queryParams = new HashMap<>();
+            if (concurrencyMode != null) {
+                queryParams.put("concurrencyMode", concurrencyMode.toJsonValue());
+            }
+            if (isPkChunkingEnabled) {
+                queryParams.put("isPkChunkingEnabled", "true");
+            }
+            if (jobType != null) {
+                queryParams.put("jobType", jobType.toJsonValue());
+            }
+            if (queryLocator != null) {
+                queryParams.put("queryLocator", queryLocator);
+            }
+
+            return requester.get(url, queryParams, GetAllJobsResponse.class);
         }
     }
 }

@@ -37,6 +37,8 @@ public class CreateJobRequest {
 
         private final String url;
 
+        // parameters
+
         private String object;
 
         private OperationEnum operation;

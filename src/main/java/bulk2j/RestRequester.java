@@ -13,7 +13,9 @@ import okhttp3.ResponseBody;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
@@ -32,32 +34,37 @@ public class RestRequester {
     }
 
     public <T> T get(String url, Class<T> responseClass) {
-        return request(url, "GET", null, responseClass);
+        return request(url, "GET", new HashMap<>(), null, responseClass);
+    }
+
+    public <T> T get(String url, Map<String, String> queryParams, Class<T> responseClass) {
+        return request(url, "GET", queryParams, null, responseClass);
     }
 
     public <T> T post(String url, Object requestData, Class<T> responseClass) {
-        return request(url, "POST", requestData, responseClass);
+        return request(url, "POST", new HashMap<>(), requestData, responseClass);
     }
 
     public <T> T put(String url, Object requestData, Class<T> responseClass) {
-        return request(url, "PUT", requestData, responseClass);
+        return request(url, "PUT", new HashMap<>(), requestData, responseClass);
     }
 
     public <T> T delete(String url, Object requestData, Class<T> responseClass) {
-        return request(url, "DELETE", requestData, responseClass);
+        return request(url, "DELETE", new HashMap<>(), requestData, responseClass);
     }
 
     public <T> T patch(String url, Object requestData, Class<T> responseClass) {
-        return request(url, "PATCH", requestData, responseClass);
+        return request(url, "PATCH", new HashMap<>(), requestData, responseClass);
     }
 
-    private <T> T request(String url, String httpMethod, Object requestData, Class<T> responseClass) {
-        HttpUrl httpUrl = Objects.requireNonNull(HttpUrl.parse(url));
+    private <T> T request(String url, String httpMethod, Map<String, String> queryParams, Object requestData, Class<T> responseClass) {
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
+        queryParams.forEach(urlBuilder::addQueryParameter);
 
         RequestBody requestBody = (requestData == null) ? null : RequestBody.create(JSON_MEDIA_TYPE, Json.encode(requestData));
 
         Request request = new Request.Builder()
-                .url(httpUrl)
+                .url(urlBuilder.build())
                 .method(httpMethod, requestBody)
                 .build();
 

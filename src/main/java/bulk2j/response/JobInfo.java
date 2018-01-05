@@ -1,5 +1,7 @@
 package bulk2j.response;
 
+import bulk2j.type.ConcurrencyModeEnum;
+import bulk2j.type.JobTypeEnum;
 import bulk2j.type.LineEndingEnum;
 import bulk2j.type.OperationEnum;
 import lombok.Data;
@@ -11,7 +13,7 @@ public class JobInfo {
 
     private String columnDelimiter; // "CONMA"
 
-    private String concurrencyMode; // "Parallel"
+    private ConcurrencyModeEnum concurrencyMode; // "Parallel"
 
     private String contentType;
 
@@ -25,7 +27,7 @@ public class JobInfo {
 
     private String id;
 
-    private String jobType;
+    private JobTypeEnum jobType;
 
     private LineEndingEnum lineEnding;
 
