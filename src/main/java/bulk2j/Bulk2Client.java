@@ -1,8 +1,10 @@
 package bulk2j;
 
+import bulk2j.request.CloseOrAbortJobRequest;
 import bulk2j.request.CreateJobRequest;
 import bulk2j.request.GetAllJobsRequest;
 import bulk2j.response.GetJobInfoResponse;
+import bulk2j.type.JobStateEnum;
 import bulk2j.type.OperationEnum;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
@@ -27,6 +29,18 @@ public class Bulk2Client {
     public CreateJobRequest.Builder createJob(String object, OperationEnum operation) {
         return new CreateJobRequest.Builder(requester, buildUrl("/services/data/vXX.X/jobs/ingest"),
                 object, operation);
+    }
+
+    public CloseOrAbortJobRequest.Builder closeOrAbortJob(String jobId, JobStateEnum state) {
+        return new CloseOrAbortJobRequest.Builder(requester, buildUrl("/services/data/vXX.X/jobs/ingest/" + jobId),
+                state);
+    }
+
+    public Executable<Void> deleteJob(String jobId) {
+        return () -> {
+            String url = buildUrl("/services/data/vXX.X/jobs/ingest/" + jobId);
+            return requester.delete(url, null, Void.class);
+        };
     }
 
     public GetAllJobsRequest.Builder getAllJobs() {

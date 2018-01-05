@@ -7,6 +7,6 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class CreateJobResponse extends JobInfo {
+public class CloseOrAbortJobResponse extends JobInfo {
 
 }

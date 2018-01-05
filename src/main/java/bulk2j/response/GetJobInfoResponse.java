@@ -2,9 +2,11 @@ package bulk2j.response;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class GetJobInfoResponse extends JobInfo {
 
     private Long apexProcessingTime;
