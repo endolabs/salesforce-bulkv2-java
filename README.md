@@ -6,7 +6,19 @@ Java 8 or later.
 
 ## Usage
 
-TBD
+### Create a Job
+
+```java
+Bulk2Client client = new Bulk2ClientBuilder()
+        .withPassword("<consumer key>", "<consumer secret>", "<username>", "<password>"
+        .build();
+
+CreateJobResponse response = client.createJob()
+        .withObject("Contact")
+        .withOperation(OperationEnum.INSERT)
+        .withContentType("CSV")
+        .execute();
+```
 
 ## Build
 
