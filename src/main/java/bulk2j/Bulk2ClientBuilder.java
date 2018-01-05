@@ -16,9 +16,40 @@ import java.io.IOException;
 @Slf4j
 public class Bulk2ClientBuilder {
 
-    public Bulk2Client create(String consumerKey, String consumerSecret, String username, String password)
+    private enum GRANT_TYPE {
+
+        PASSWORD("password");
+
+        private String value;
+
+        GRANT_TYPE(String value) {
+            this.value = value;
+        }
+    }
+
+    private GRANT_TYPE grantType;
+
+    private String consumerKey;
+
+    private String consumerSecret;
+
+    private String username;
+
+    private String password;
+
+    public Bulk2ClientBuilder withPassword(String consumerKey, String consumerSecret, String username, String password) {
+        this.grantType = GRANT_TYPE.PASSWORD;
+        this.consumerKey = consumerKey;
+        this.consumerSecret = consumerSecret;
+        this.username = username;
+        this.password = password;
+
+        return this;
+    }
+
+    public Bulk2Client build()
             throws IOException {
-        AccessToken token = getAccessToken(consumerKey, consumerSecret, username, password);
+        AccessToken token = getAccessToken();
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(authorizationInterceptor(token.getAccessToken()))
@@ -27,12 +58,12 @@ public class Bulk2ClientBuilder {
         return new Bulk2Client(client, token.getInstanceUrl());
     }
 
-    private AccessToken getAccessToken(String consumerKey, String consumerSecret, String username, String password)
+    private AccessToken getAccessToken()
             throws IOException {
         HttpUrl authorizeUrl = HttpUrl.parse("https://login.salesforce.com/services/oauth2/token").newBuilder().build();
 
         RequestBody requestBody = new FormBody.Builder()
-                .add("grant_type", "password")
+                .add("grant_type", grantType.value)
                 .add("client_id", consumerKey)
                 .add("client_secret", consumerSecret)
                 .add("username", username)
