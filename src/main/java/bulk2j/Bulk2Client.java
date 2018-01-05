@@ -2,6 +2,7 @@ package bulk2j;
 
 import bulk2j.request.CreateJobRequest;
 import bulk2j.request.GetAllJobsRequest;
+import bulk2j.response.GetJobInfoResponse;
 import bulk2j.type.OperationEnum;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
@@ -30,6 +31,13 @@ public class Bulk2Client {
 
     public GetAllJobsRequest.Builder getAllJobs() {
         return new GetAllJobsRequest.Builder(requester, buildUrl("/services/data/vXX.X/jobs/ingest"));
+    }
+
+    public Executable<GetJobInfoResponse> getJobInfo(String jobId) {
+        return () -> {
+            String url = buildUrl("/services/data/vXX.X/jobs/ingest/" + jobId);
+            return requester.get(url, GetJobInfoResponse.class);
+        };
     }
 
     private String buildUrl(String path) {
