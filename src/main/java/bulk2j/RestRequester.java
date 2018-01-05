@@ -9,10 +9,12 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 public class RestRequester {
@@ -30,24 +32,43 @@ public class RestRequester {
     }
 
     public <T> T get(String url, Class<T> responseClass) {
-        return null;
+        return request(url, "GET", null, responseClass);
     }
 
     public <T> T post(String url, Object requestData, Class<T> responseClass) {
-        HttpUrl httpUrl = HttpUrl.parse(url);
+        return request(url, "POST", requestData, responseClass);
+    }
 
-        String requestJson = Json.encode(requestData);
-        log.info("request json {}", requestJson);
-        RequestBody requestBody = RequestBody.create(JSON_MEDIA_TYPE, requestJson);
+    public <T> T put(String url, Object requestData, Class<T> responseClass) {
+        return request(url, "PUT", requestData, responseClass);
+    }
+
+    public <T> T delete(String url, Object requestData, Class<T> responseClass) {
+        return request(url, "DELETE", requestData, responseClass);
+    }
+
+    public <T> T patch(String url, Object requestData, Class<T> responseClass) {
+        return request(url, "PATCH", requestData, responseClass);
+    }
+
+    private <T> T request(String url, String httpMethod, Object requestData, Class<T> responseClass) {
+        HttpUrl httpUrl = Objects.requireNonNull(HttpUrl.parse(url));
+
+        RequestBody requestBody = (requestData == null) ? null : RequestBody.create(JSON_MEDIA_TYPE, Json.encode(requestData));
 
         Request request = new Request.Builder()
                 .url(httpUrl)
-                .post(requestBody)
+                .method(httpMethod, requestBody)
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
-            String responseJson = response.body().string();
-            log.info("post response {} {}", response.code(), responseJson);
+            ResponseBody responseBody = response.body();
+            if (responseBody == null) {
+                throw new RuntimeException("response body is null.");
+            }
+
+            String responseJson = responseBody.string();
+            log.info("{} response {} {}", httpMethod, response.code(), responseJson);
 
             if (response.isSuccessful()) {
                 return Json.decode(responseJson, responseClass);
@@ -59,17 +80,5 @@ public class RestRequester {
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
-    }
-
-    public <T> T put(String url, Object requestData, Class<T> responseClass) {
-        return null;
-    }
-
-    public <T> T delete(String url, Object requestData, Class<T> responseClass) {
-        return null;
-    }
-
-    public <T> T patch(String url, Object requestData, Class<T> responseClass) {
-        return null;
     }
 }
