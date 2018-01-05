@@ -1,6 +1,5 @@
 package bulk2j.request;
 
-import bulk2j.Bulk2Client;
 import bulk2j.RestRequester;
 import bulk2j.response.CreateJobResponse;
 import bulk2j.type.ColumnDelimiterEnum;
@@ -34,7 +33,7 @@ public class CreateJobRequest {
 
     public static class Builder {
 
-        private final Bulk2Client client;
+        private final RestRequester requester;
 
         private final String url;
 
@@ -50,8 +49,8 @@ public class CreateJobRequest {
 
         private LineEndingEnum lineEnding;
 
-        public Builder(Bulk2Client client, String url, String object, OperationEnum operation) {
-            this.client = client;
+        public Builder(RestRequester requester, String url, String object, OperationEnum operation) {
+            this.requester = requester;
             this.url = url;
             this.object = object;
             this.operation = operation;
@@ -79,8 +78,6 @@ public class CreateJobRequest {
 
         public CreateJobResponse execute() {
             CreateJobRequest request = new CreateJobRequest(this);
-
-            RestRequester requester = new RestRequester(client.getClient());
 
             return requester.post(url, request, CreateJobResponse.class);
         }
