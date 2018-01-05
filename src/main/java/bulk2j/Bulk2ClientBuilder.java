@@ -1,7 +1,5 @@
 package bulk2j;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
@@ -18,15 +16,13 @@ import java.io.IOException;
 @Slf4j
 public class Bulk2ClientBuilder {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper()
-            .setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
-
     public Bulk2Client create(String consumerKey, String consumerSecret, String username, String password)
             throws IOException {
         AccessToken token = getAccessToken(consumerKey, consumerSecret, username, password);
 
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(authorizationInterceptor(token.getAccessToken()))
+                .addInterceptor(httpLoggingInterceptor(HttpLoggingInterceptor.Level.BODY))
                 .build();
         return new Bulk2Client(client, token.getInstanceUrl());
     }
@@ -50,13 +46,13 @@ public class Bulk2ClientBuilder {
 
         OkHttpClient client = new OkHttpClient().newBuilder()
                 // .addInterceptor(new SigningInterceptor(consumer))
-                .addInterceptor(httpLoggingInterceptor())
+                .addInterceptor(httpLoggingInterceptor(HttpLoggingInterceptor.Level.BASIC))
                 .build();
 
         Response response = client.newCall(request).execute();
         ResponseBody responseBody = response.body();
 
-        return objectMapper.readValue(responseBody.byteStream(), AccessToken.class);
+        return Json.decode(responseBody.string(), AccessToken.class);
     }
 
     private Interceptor authorizationInterceptor(String token) {
@@ -68,9 +64,9 @@ public class Bulk2ClientBuilder {
         };
     }
 
-    private HttpLoggingInterceptor httpLoggingInterceptor() {
+    private HttpLoggingInterceptor httpLoggingInterceptor(HttpLoggingInterceptor.Level level) {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor(message -> log.info(message));
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        logging.setLevel(level);
 
         return logging;
     }

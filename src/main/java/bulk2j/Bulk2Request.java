@@ -1,12 +1,14 @@
 package bulk2j;
 
+import bulk2j.request.CreateJobRequest;
+import bulk2j.response.CreateJobResponse;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class Bulk2Request {
 
-    public void createJob(Bulk2Client client) {
-        // TODO: not yet implemented
+    public CreateJobResponse createJob(Bulk2Client client, CreateJobRequest request) {
+        return client.post("/services/data/vXX.X/jobs/ingest", request, CreateJobResponse.class);
     }
 
     public void uploadJobData(Bulk2Client client) {
