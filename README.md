@@ -13,9 +13,7 @@ Bulk2Client client = new Bulk2ClientBuilder()
         .withPassword("<consumer key>", "<consumer secret>", "<username>", "<password>"
         .build();
 
-CreateJobResponse response = client.createJob()
-        .withObject("Contact")
-        .withOperation(OperationEnum.INSERT)
+CreateJobResponse response = client.createJob("Contact", OperationEnum.INSERT)
         .withContentType("CSV")
         .execute();
 ```

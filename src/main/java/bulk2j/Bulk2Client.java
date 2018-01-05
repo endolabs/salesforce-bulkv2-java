@@ -1,6 +1,7 @@
 package bulk2j;
 
 import bulk2j.request.CreateJobRequest;
+import bulk2j.type.OperationEnum;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,8 +18,9 @@ public class Bulk2Client {
 
     private final String instanceUrl;
 
-    public CreateJobRequest.Builder createJob() {
-        return new CreateJobRequest.Builder(this, buildUrl("/services/data/vXX.X/jobs/ingest"));
+    public CreateJobRequest.Builder createJob(String object, OperationEnum operation) {
+        return new CreateJobRequest.Builder(this, buildUrl("/services/data/vXX.X/jobs/ingest"),
+                object, operation);
     }
 
     private String buildUrl(String path) {

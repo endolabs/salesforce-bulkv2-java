@@ -23,6 +23,15 @@ public class CreateJobRequest {
 
     private final OperationEnum operation;
 
+    private CreateJobRequest(Builder builder) {
+        this.columnDelimiter = builder.columnDelimiter;
+        this.contentType = builder.contentType;
+        this.externalIdFieldName = builder.externalIdFieldName;
+        this.lineEnding = builder.lineEnding;
+        this.object = builder.object;
+        this.operation = builder.operation;
+    }
+
     public static class Builder {
 
         private final Bulk2Client client;
@@ -33,20 +42,23 @@ public class CreateJobRequest {
 
         private OperationEnum operation;
 
+        private ColumnDelimiterEnum columnDelimiter;
+
         private String contentType;
 
-        public Builder(Bulk2Client client, String url) {
+        private String externalIdFieldName;
+
+        private LineEndingEnum lineEnding;
+
+        public Builder(Bulk2Client client, String url, String object, OperationEnum operation) {
             this.client = client;
             this.url = url;
-        }
-
-        public Builder withObject(String object) {
             this.object = object;
-            return this;
+            this.operation = operation;
         }
 
-        public Builder withOperation(OperationEnum operation) {
-            this.operation = operation;
+        public Builder withColumnDelimiter(ColumnDelimiterEnum columnDelimiter) {
+            this.columnDelimiter = columnDelimiter;
             return this;
         }
 
@@ -55,8 +67,18 @@ public class CreateJobRequest {
             return this;
         }
 
+        public Builder withExternalIdFieldName(String externalIdFieldName) {
+            this.externalIdFieldName = externalIdFieldName;
+            return this;
+        }
+
+        public Builder withLineEnding(LineEndingEnum lineEnding) {
+            this.lineEnding = lineEnding;
+            return this;
+        }
+
         public CreateJobResponse execute() {
-            CreateJobRequest request = new CreateJobRequest(null, contentType, null, null, object, operation);
+            CreateJobRequest request = new CreateJobRequest(this);
 
             RestRequester requester = new RestRequester(client.getClient());
 

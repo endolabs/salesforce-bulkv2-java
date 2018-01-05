@@ -8,7 +8,7 @@ public enum LineEndingEnum {
     LF,
 
     /**
-     * —carriage return character followed by a linefeed character
+     * carriage return character followed by a linefeed character
      */
     CRLF
 }
