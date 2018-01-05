@@ -1,4 +1,4 @@
-package demo;
+package bulk2j;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;

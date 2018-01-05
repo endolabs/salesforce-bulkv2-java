@@ -1,4 +1,4 @@
-package demo;
+package bulk2j;
 
 import lombok.Data;
 
