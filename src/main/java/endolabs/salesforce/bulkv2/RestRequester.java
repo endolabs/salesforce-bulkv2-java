@@ -1,7 +1,7 @@
 package endolabs.salesforce.bulkv2;
 
-import endolabs.salesforce.bulkv2.response.ErrorResponse;
 import com.fasterxml.jackson.core.type.TypeReference;
+import endolabs.salesforce.bulkv2.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
@@ -15,7 +15,6 @@ import okio.ByteString;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.io.UncheckedIOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -133,11 +132,10 @@ public class RestRequester {
                 return (json == null || json.isEmpty()) ? null : Json.decode(json, responseClass);
             } else {
                 List<ErrorResponse> errors = Json.decode(responseBody.string(), ERRORS_TYPE_REFERENCE);
-                log.error("error : {}", errors);
-                throw new RuntimeException("error.");
+                throw new BulkRequestException(errors);
             }
         } catch (IOException e) {
-            throw new UncheckedIOException(e);
+            throw new BulkRequestException(e);
         }
     }
 }
