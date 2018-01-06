@@ -1,12 +1,14 @@
 package endolabs.salesforce.bulkv2.request;
 
 import endolabs.salesforce.bulkv2.type.JobStateEnum;
-import lombok.Value;
 
-@Value
 public class CloseOrAbortJobRequest {
 
     private final JobStateEnum state;
+
+    public JobStateEnum getState() {
+        return state;
+    }
 
     private CloseOrAbortJobRequest(Builder builder) {
         this.state = builder.state;

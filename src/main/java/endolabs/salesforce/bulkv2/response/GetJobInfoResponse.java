@@ -1,12 +1,5 @@
 package endolabs.salesforce.bulkv2.response;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
-
-@Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
 public class GetJobInfoResponse extends JobInfo {
 
     private Long apexProcessingTime;
@@ -20,4 +13,52 @@ public class GetJobInfoResponse extends JobInfo {
     private Integer numberRecordsProcessed;
 
     private Integer numberRecordsFailed;
+
+    public Long getApexProcessingTime() {
+        return apexProcessingTime;
+    }
+
+    public void setApexProcessingTime(Long apexProcessingTime) {
+        this.apexProcessingTime = apexProcessingTime;
+    }
+
+    public Long getApiActiveProcessingTime() {
+        return apiActiveProcessingTime;
+    }
+
+    public void setApiActiveProcessingTime(Long apiActiveProcessingTime) {
+        this.apiActiveProcessingTime = apiActiveProcessingTime;
+    }
+
+    public Integer getRetries() {
+        return retries;
+    }
+
+    public void setRetries(Integer retries) {
+        this.retries = retries;
+    }
+
+    public Long getTotalProcessingTime() {
+        return totalProcessingTime;
+    }
+
+    public void setTotalProcessingTime(Long totalProcessingTime) {
+        this.totalProcessingTime = totalProcessingTime;
+    }
+
+    public Integer getNumberRecordsProcessed() {
+        return numberRecordsProcessed;
+    }
+
+    public void setNumberRecordsProcessed(Integer numberRecordsProcessed) {
+        this.numberRecordsProcessed = numberRecordsProcessed;
+    }
+
+    public Integer getNumberRecordsFailed() {
+        return numberRecordsFailed;
+    }
+
+    public void setNumberRecordsFailed(Integer numberRecordsFailed) {
+        this.numberRecordsFailed = numberRecordsFailed;
+    }
 }

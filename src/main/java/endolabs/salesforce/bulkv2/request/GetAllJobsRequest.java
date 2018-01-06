@@ -2,12 +2,10 @@ package endolabs.salesforce.bulkv2.request;
 
 import endolabs.salesforce.bulkv2.type.ConcurrencyModeEnum;
 import endolabs.salesforce.bulkv2.type.JobTypeEnum;
-import lombok.Value;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Value
 public class GetAllJobsRequest {
 
     public static class Builder {

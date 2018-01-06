@@ -1,6 +1,5 @@
 package endolabs.salesforce.bulkv2;
 
-import lombok.extern.slf4j.Slf4j;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
@@ -10,12 +9,15 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.function.Supplier;
 
-@Slf4j
 public class Bulk2ClientBuilder {
+
+    private static final Logger log = LoggerFactory.getLogger(Bulk2ClientBuilder.class);
 
     private static final String TOKEN_REQUEST_ENDPOINT = "https://login.salesforce.com/services/oauth2/token";
 

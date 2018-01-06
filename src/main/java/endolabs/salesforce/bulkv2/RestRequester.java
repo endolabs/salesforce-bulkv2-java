@@ -3,7 +3,6 @@ package endolabs.salesforce.bulkv2;
 import com.fasterxml.jackson.core.type.TypeReference;
 import endolabs.salesforce.bulkv2.request.CreateJobRequest;
 import endolabs.salesforce.bulkv2.response.ErrorResponse;
-import lombok.extern.slf4j.Slf4j;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -21,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@Slf4j
 public class RestRequester {
 
     private static final MediaType JSON_MEDIA_TYPE = MediaType.parse("application/json; charset=utf-8");

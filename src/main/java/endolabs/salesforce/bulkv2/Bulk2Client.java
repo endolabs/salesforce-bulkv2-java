@@ -10,13 +10,15 @@ import endolabs.salesforce.bulkv2.response.GetJobInfoResponse;
 import endolabs.salesforce.bulkv2.response.JobInfo;
 import endolabs.salesforce.bulkv2.type.JobStateEnum;
 import endolabs.salesforce.bulkv2.type.OperationEnum;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Reader;
 import java.util.function.Consumer;
 
-@Slf4j
 public class Bulk2Client {
+
+    private static final Logger log = LoggerFactory.getLogger(Bulk2Client.class);
 
     private static final String API_VERSION = "v41.0";
 
@@ -30,7 +32,8 @@ public class Bulk2Client {
     }
 
     public CreateJobResponse createJob(String object, OperationEnum operation) {
-        return createJob(object, operation, (request) -> {});
+        return createJob(object, operation, (request) -> {
+        });
     }
 
     public CreateJobResponse createJob(String object, OperationEnum operation, Consumer<CreateJobRequest.Builder> requestBuilder) {
@@ -63,7 +66,8 @@ public class Bulk2Client {
     }
 
     public GetAllJobsResponse getAllJobs() {
-        return getAllJobs(request -> {});
+        return getAllJobs(request -> {
+        });
     }
 
     public GetAllJobsResponse getAllJobs(Consumer<GetAllJobsRequest.Builder> requestBuilder) {

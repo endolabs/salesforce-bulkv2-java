@@ -7,11 +7,9 @@ repositories {
 dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.9.1'
     compile 'com.squareup.okhttp3:logging-interceptor:3.9.1'
-    // compile 'se.akerfeldt:okhttp-signpost:1.1.0'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.9.3'
     compile 'org.slf4j:slf4j-api:1.7.25'
     compile 'ch.qos.logback:logback-classic:1.2.3'
-    compileOnly 'org.projectlombok:lombok:1.16.18'
 
     testCompile 'junit:junit:4.12'
 }

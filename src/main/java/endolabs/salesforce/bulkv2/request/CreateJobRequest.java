@@ -5,11 +5,9 @@ import endolabs.salesforce.bulkv2.type.ColumnDelimiterEnum;
 import endolabs.salesforce.bulkv2.type.ContentTypeEnum;
 import endolabs.salesforce.bulkv2.type.LineEndingEnum;
 import endolabs.salesforce.bulkv2.type.OperationEnum;
-import lombok.Value;
 
 import java.io.File;
 
-@Value
 public class CreateJobRequest {
 
     private final ColumnDelimiterEnum columnDelimiter;
@@ -29,6 +27,38 @@ public class CreateJobRequest {
 
     @JsonIgnore
     private final File contentFile;
+
+    public ColumnDelimiterEnum getColumnDelimiter() {
+        return columnDelimiter;
+    }
+
+    public ContentTypeEnum getContentType() {
+        return contentType;
+    }
+
+    public String getExternalIdFieldName() {
+        return externalIdFieldName;
+    }
+
+    public LineEndingEnum getLineEnding() {
+        return lineEnding;
+    }
+
+    public String getObject() {
+        return object;
+    }
+
+    public OperationEnum getOperation() {
+        return operation;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public File getContentFile() {
+        return contentFile;
+    }
 
     private CreateJobRequest(Builder builder) {
         this.columnDelimiter = builder.columnDelimiter;
