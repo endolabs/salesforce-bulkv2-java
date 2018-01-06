@@ -1,10 +1,10 @@
-package bulk2j.response;
+package endolabs.salesforce.bulkv2.response;
 
-import bulk2j.type.ConcurrencyModeEnum;
-import bulk2j.type.JobStateEnum;
-import bulk2j.type.JobTypeEnum;
-import bulk2j.type.LineEndingEnum;
-import bulk2j.type.OperationEnum;
+import endolabs.salesforce.bulkv2.type.ConcurrencyModeEnum;
+import endolabs.salesforce.bulkv2.type.JobStateEnum;
+import endolabs.salesforce.bulkv2.type.JobTypeEnum;
+import endolabs.salesforce.bulkv2.type.LineEndingEnum;
+import endolabs.salesforce.bulkv2.type.OperationEnum;
 import lombok.Data;
 
 @Data

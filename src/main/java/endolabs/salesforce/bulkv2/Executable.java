@@ -1,4 +1,4 @@
-package bulk2j;
+package endolabs.salesforce.bulkv2;
 
 public interface Executable<T> {
 

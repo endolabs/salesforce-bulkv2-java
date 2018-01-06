@@ -1,10 +1,10 @@
-package bulk2j.request;
+package endolabs.salesforce.bulkv2.request;
 
-import bulk2j.RestRequester;
-import bulk2j.response.CreateJobResponse;
-import bulk2j.type.ColumnDelimiterEnum;
-import bulk2j.type.LineEndingEnum;
-import bulk2j.type.OperationEnum;
+import endolabs.salesforce.bulkv2.RestRequester;
+import endolabs.salesforce.bulkv2.response.CreateJobResponse;
+import endolabs.salesforce.bulkv2.type.ColumnDelimiterEnum;
+import endolabs.salesforce.bulkv2.type.LineEndingEnum;
+import endolabs.salesforce.bulkv2.type.OperationEnum;
 import lombok.Value;
 
 @Value

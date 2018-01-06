@@ -1,23 +1,21 @@
-package bulk2j.type;
+package endolabs.salesforce.bulkv2.type;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.util.Arrays;
 
-public enum OperationEnum {
+public enum JobTypeEnum {
 
-    INSERT("insert"),
+    BIG_OBJECTS("BigObjectIngest"),
 
-    DELETE("delete"),
+    BULK_API_1_0("Classic"),
 
-    UPDATE("update"),
-
-    UPSERT("upsert");
+    BULK_API_2_0("V2Ingest");
 
     private final String value;
 
-    OperationEnum(String value) {
+    JobTypeEnum(String value) {
         this.value = value;
     }
 
@@ -27,7 +25,7 @@ public enum OperationEnum {
     }
 
     @JsonCreator
-    public static OperationEnum fromValue(String value) {
+    public static JobTypeEnum fromValue(String value) {
         return Arrays.stream(values())
                 .filter(v -> v.value.equals(value))
                 .findFirst()

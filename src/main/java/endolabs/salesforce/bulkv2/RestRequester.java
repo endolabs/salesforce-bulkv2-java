@@ -1,6 +1,6 @@
-package bulk2j;
+package endolabs.salesforce.bulkv2;
 
-import bulk2j.response.ErrorResponse;
+import endolabs.salesforce.bulkv2.response.ErrorResponse;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.HttpUrl;

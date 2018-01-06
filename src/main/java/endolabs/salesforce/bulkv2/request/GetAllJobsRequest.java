@@ -1,9 +1,9 @@
-package bulk2j.request;
+package endolabs.salesforce.bulkv2.request;
 
-import bulk2j.RestRequester;
-import bulk2j.response.GetAllJobsResponse;
-import bulk2j.type.ConcurrencyModeEnum;
-import bulk2j.type.JobTypeEnum;
+import endolabs.salesforce.bulkv2.RestRequester;
+import endolabs.salesforce.bulkv2.response.GetAllJobsResponse;
+import endolabs.salesforce.bulkv2.type.ConcurrencyModeEnum;
+import endolabs.salesforce.bulkv2.type.JobTypeEnum;
 import lombok.Value;
 
 import java.util.HashMap;

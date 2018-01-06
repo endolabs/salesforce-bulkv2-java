@@ -1,4 +1,4 @@
-package bulk2j;
+package endolabs.salesforce.bulkv2;
 
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.FormBody;

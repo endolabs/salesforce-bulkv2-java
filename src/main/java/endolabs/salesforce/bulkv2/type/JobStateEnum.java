@@ -1,4 +1,4 @@
-package bulk2j.type;
+package endolabs.salesforce.bulkv2.type;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;

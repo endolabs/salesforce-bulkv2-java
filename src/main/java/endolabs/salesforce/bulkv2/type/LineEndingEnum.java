@@ -1,4 +1,4 @@
-package bulk2j.type;
+package endolabs.salesforce.bulkv2.type;
 
 public enum LineEndingEnum {
 

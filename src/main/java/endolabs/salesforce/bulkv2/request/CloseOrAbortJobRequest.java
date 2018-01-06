@@ -1,8 +1,8 @@
-package bulk2j.request;
+package endolabs.salesforce.bulkv2.request;
 
-import bulk2j.RestRequester;
-import bulk2j.response.CloseOrAbortJobResponse;
-import bulk2j.type.JobStateEnum;
+import endolabs.salesforce.bulkv2.RestRequester;
+import endolabs.salesforce.bulkv2.response.CloseOrAbortJobResponse;
+import endolabs.salesforce.bulkv2.type.JobStateEnum;
 import lombok.Value;
 
 @Value

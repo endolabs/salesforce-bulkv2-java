@@ -1,4 +1,4 @@
-package bulk2j;
+package endolabs.salesforce.bulkv2;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

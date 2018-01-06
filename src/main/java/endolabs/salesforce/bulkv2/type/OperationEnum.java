@@ -1,19 +1,23 @@
-package bulk2j.type;
+package endolabs.salesforce.bulkv2.type;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.util.Arrays;
 
-public enum ConcurrencyModeEnum {
+public enum OperationEnum {
 
-    PARALLEL("Parallel"),
+    INSERT("insert"),
 
-    SERIAL("Serial");
+    DELETE("delete"),
+
+    UPDATE("update"),
+
+    UPSERT("upsert");
 
     private final String value;
 
-    ConcurrencyModeEnum(String value) {
+    OperationEnum(String value) {
         this.value = value;
     }
 
@@ -23,7 +27,7 @@ public enum ConcurrencyModeEnum {
     }
 
     @JsonCreator
-    public static ConcurrencyModeEnum fromValue(String value) {
+    public static OperationEnum fromValue(String value) {
         return Arrays.stream(values())
                 .filter(v -> v.value.equals(value))
                 .findFirst()

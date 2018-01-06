@@ -1,4 +1,4 @@
-package bulk2j.response;
+package endolabs.salesforce.bulkv2.response;
 
 import lombok.Data;
 

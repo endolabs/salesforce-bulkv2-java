@@ -1,11 +1,11 @@
-package bulk2j;
+package endolabs.salesforce.bulkv2;
 
-import bulk2j.request.CloseOrAbortJobRequest;
-import bulk2j.request.CreateJobRequest;
-import bulk2j.request.GetAllJobsRequest;
-import bulk2j.response.GetJobInfoResponse;
-import bulk2j.type.JobStateEnum;
-import bulk2j.type.OperationEnum;
+import endolabs.salesforce.bulkv2.request.CloseOrAbortJobRequest;
+import endolabs.salesforce.bulkv2.request.CreateJobRequest;
+import endolabs.salesforce.bulkv2.request.GetAllJobsRequest;
+import endolabs.salesforce.bulkv2.response.GetJobInfoResponse;
+import endolabs.salesforce.bulkv2.type.JobStateEnum;
+import endolabs.salesforce.bulkv2.type.OperationEnum;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 
