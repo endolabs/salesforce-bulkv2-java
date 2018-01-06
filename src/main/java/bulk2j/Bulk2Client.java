@@ -9,6 +9,8 @@ import bulk2j.type.OperationEnum;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 
+import java.io.Reader;
+
 @Slf4j
 public class Bulk2Client {
 
@@ -58,6 +60,27 @@ public class Bulk2Client {
         return () -> {
             String url = buildUrl("/services/data/vXX.X/jobs/ingest/" + jobId);
             return requester.get(url, GetJobInfoResponse.class);
+        };
+    }
+
+    public Executable<Reader> getJobSuccessfulRecordResults(String jobId) {
+        return () -> {
+            String url = buildUrl("/services/data/vXX.X/jobs/ingest/" + jobId + "/successfulResults/");
+            return requester.getCsv(url);
+        };
+    }
+
+    public Executable<Reader> getJobFailedRecordResults(String jobId) {
+        return () -> {
+            String url = buildUrl("/services/data/vXX.X/jobs/ingest/" + jobId + "/failedResults/");
+            return requester.getCsv(url);
+        };
+    }
+
+    public Executable<Reader> getJobUnprocessedRecordResults(String jobId) {
+        return () -> {
+            String url = buildUrl("/services/data/vXX.X/jobs/ingest/" + jobId + "/unprocessedrecords/");
+            return requester.getCsv(url);
         };
     }
 

@@ -14,6 +14,7 @@ import okhttp3.ResponseBody;
 import okio.ByteString;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.io.UncheckedIOException;
 import java.util.HashMap;
 import java.util.List;
@@ -60,6 +61,10 @@ public class RestRequester {
         return request(url, "PUT", new HashMap<>(), requestBody, responseClass);
     }
 
+    public Reader getCsv(String url) {
+        return request(url, "GET", new HashMap<>(), null, Reader.class);
+    }
+
     public <T> T get(String url, Class<T> responseClass) {
         return request(url, "GET", new HashMap<>(), null, responseClass);
     }
@@ -90,6 +95,22 @@ public class RestRequester {
         return request(url, httpMethod, queryParams, requestBody, responseClass);
     }
 
+    private Response doRequest(Request request) {
+        try {
+            return client.newCall(request).execute();
+        } catch (IOException e) {
+            throw new BulkRequestException(e);
+        }
+    }
+
+    private ResponseBody unwrap(Response response) {
+        ResponseBody responseBody = response.body();
+        if (responseBody == null) {
+            throw new BulkRequestException("response body is null.");
+        }
+        return responseBody;
+    }
+
     private <T> T request(String url, String httpMethod, Map<String, String> queryParams, RequestBody requestBody, Class<T> responseClass) {
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
         queryParams.forEach(urlBuilder::addQueryParameter);
@@ -99,23 +120,19 @@ public class RestRequester {
                 .method(httpMethod, requestBody)
                 .build();
 
-        try (Response response = client.newCall(request).execute()) {
-            ResponseBody responseBody = response.body();
-            if (responseBody == null) {
-                throw new RuntimeException("response body is null.");
-            }
+        if (responseClass.isAssignableFrom(Reader.class)) {
+            ResponseBody responseBody = unwrap(doRequest(request));
+            return (T) responseBody.charStream(); // NOT close Response
+        }
 
-            String responseJson = responseBody.string();
-            log.info("{} response {} {}", httpMethod, response.code(), responseJson);
+        try (Response response = doRequest(request)) {
+            ResponseBody responseBody = unwrap(response);
 
             if (response.isSuccessful()) {
-                if (responseJson.isEmpty()) {
-                    return null;
-                } else {
-                    return Json.decode(responseJson, responseClass);
-                }
+                String json = responseBody.string();
+                return (json == null || json.isEmpty()) ? null : Json.decode(json, responseClass);
             } else {
-                List<ErrorResponse> errors = Json.decode(responseJson, ERRORS_TYPE_REFERENCE);
+                List<ErrorResponse> errors = Json.decode(responseBody.string(), ERRORS_TYPE_REFERENCE);
                 log.error("error : {}", errors);
                 throw new RuntimeException("error.");
             }
