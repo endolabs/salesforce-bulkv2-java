@@ -2,6 +2,7 @@ package endolabs.salesforce.bulkv2.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import endolabs.salesforce.bulkv2.type.ColumnDelimiterEnum;
+import endolabs.salesforce.bulkv2.type.ContentTypeEnum;
 import endolabs.salesforce.bulkv2.type.LineEndingEnum;
 import endolabs.salesforce.bulkv2.type.OperationEnum;
 import lombok.Value;
@@ -13,7 +14,7 @@ public class CreateJobRequest {
 
     private final ColumnDelimiterEnum columnDelimiter;
 
-    private final String contentType;
+    private final ContentTypeEnum contentType;
 
     private final String externalIdFieldName;
 
@@ -48,7 +49,7 @@ public class CreateJobRequest {
 
         private ColumnDelimiterEnum columnDelimiter;
 
-        private String contentType;
+        private ContentTypeEnum contentType;
 
         private String externalIdFieldName;
 
@@ -61,6 +62,7 @@ public class CreateJobRequest {
         public Builder(String object, OperationEnum operation) {
             this.object = object;
             this.operation = operation;
+            this.contentType = ContentTypeEnum.CSV;
         }
 
         public Builder withColumnDelimiter(ColumnDelimiterEnum columnDelimiter) {
@@ -68,7 +70,7 @@ public class CreateJobRequest {
             return this;
         }
 
-        public Builder withContentType(String contentType) {
+        public Builder withContentType(ContentTypeEnum contentType) {
             this.contentType = contentType;
             return this;
         }

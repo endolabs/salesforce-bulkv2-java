@@ -28,8 +28,7 @@ Bulk2Client client = new Bulk2ClientBuilder()
 ### Upload CSV data using a separate request
 
 ```java
-CreateJobResponse createJobResponse = client.createJob("Account", OperationEnum.INSERT,
-        request -> request.withContentType("CSV"));
+CreateJobResponse createJobResponse = client.createJob("Account", OperationEnum.INSERT);
 String jobId = createJobResponse.getId();
 
 String csv = "Name,Description,NumberOfEmployees\n" +
@@ -62,7 +61,7 @@ String csv = "Name,Description,NumberOfEmployees\n" +
         "TestAccount3,Yet another description,50";
 
 CreateJobResponse createJobResponse = client.createJob("Account", OperationEnum.INSERT,
-        request -> request.withContentType("CSV").withContent(csv));
+        request -> request.withContent(csv));
 String jobId = createJobResponse.getId();
 
 while (true) {

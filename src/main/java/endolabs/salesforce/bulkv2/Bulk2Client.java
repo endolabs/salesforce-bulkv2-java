@@ -29,6 +29,10 @@ public class Bulk2Client {
         this.requester = requester;
     }
 
+    public CreateJobResponse createJob(String object, OperationEnum operation) {
+        return createJob(object, operation, (request) -> {});
+    }
+
     public CreateJobResponse createJob(String object, OperationEnum operation, Consumer<CreateJobRequest.Builder> requestBuilder) {
         String url = buildUrl("/services/data/vXX.X/jobs/ingest");
 
