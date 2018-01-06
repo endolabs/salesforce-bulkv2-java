@@ -1,7 +1,5 @@
 package endolabs.salesforce.bulkv2.request;
 
-import endolabs.salesforce.bulkv2.RestRequester;
-import endolabs.salesforce.bulkv2.response.GetAllJobsResponse;
 import endolabs.salesforce.bulkv2.type.ConcurrencyModeEnum;
 import endolabs.salesforce.bulkv2.type.JobTypeEnum;
 import lombok.Value;
@@ -14,12 +12,6 @@ public class GetAllJobsRequest {
 
     public static class Builder {
 
-        private final RestRequester requester;
-
-        private final String url;
-
-        // parameters
-
         private ConcurrencyModeEnum concurrencyMode;
 
         private boolean isPkChunkingEnabled;
@@ -27,11 +19,6 @@ public class GetAllJobsRequest {
         private JobTypeEnum jobType;
 
         private String queryLocator;
-
-        public Builder(RestRequester requester, String url) {
-            this.requester = requester;
-            this.url = url;
-        }
 
         public Builder withConcurrencyMode(ConcurrencyModeEnum concurrencyMode) {
             this.concurrencyMode = concurrencyMode;
@@ -53,7 +40,7 @@ public class GetAllJobsRequest {
             return this;
         }
 
-        public GetAllJobsResponse execute() {
+        public Map<String, String> buildParameters() {
             Map<String, String> queryParams = new HashMap<>();
             if (concurrencyMode != null) {
                 queryParams.put("concurrencyMode", concurrencyMode.toJsonValue());
@@ -68,7 +55,7 @@ public class GetAllJobsRequest {
                 queryParams.put("queryLocator", queryLocator);
             }
 
-            return requester.get(url, queryParams, GetAllJobsResponse.class);
+            return queryParams;
         }
     }
 }

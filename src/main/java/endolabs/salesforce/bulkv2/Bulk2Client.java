@@ -3,6 +3,9 @@ package endolabs.salesforce.bulkv2;
 import endolabs.salesforce.bulkv2.request.CloseOrAbortJobRequest;
 import endolabs.salesforce.bulkv2.request.CreateJobRequest;
 import endolabs.salesforce.bulkv2.request.GetAllJobsRequest;
+import endolabs.salesforce.bulkv2.response.CloseOrAbortJobResponse;
+import endolabs.salesforce.bulkv2.response.CreateJobResponse;
+import endolabs.salesforce.bulkv2.response.GetAllJobsResponse;
 import endolabs.salesforce.bulkv2.response.GetJobInfoResponse;
 import endolabs.salesforce.bulkv2.type.JobStateEnum;
 import endolabs.salesforce.bulkv2.type.OperationEnum;
@@ -10,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 
 import java.io.Reader;
+import java.util.function.Consumer;
 
 @Slf4j
 public class Bulk2Client {
@@ -28,60 +32,66 @@ public class Bulk2Client {
         this.requester = new RestRequester(client);
     }
 
-    public CreateJobRequest.Builder createJob(String object, OperationEnum operation) {
-        return new CreateJobRequest.Builder(requester, buildUrl("/services/data/vXX.X/jobs/ingest"),
-                object, operation);
+    public CreateJobResponse createJob(String object, OperationEnum operation, Consumer<CreateJobRequest.Builder> requestBuilder) {
+        String url = buildUrl("/services/data/vXX.X/jobs/ingest");
+
+        CreateJobRequest.Builder builder = new CreateJobRequest.Builder(object, operation);
+        requestBuilder.accept(builder);
+
+        return requester.post(url, builder.build(), CreateJobResponse.class);
     }
 
-    public CloseOrAbortJobRequest.Builder closeOrAbortJob(String jobId, JobStateEnum state) {
-        return new CloseOrAbortJobRequest.Builder(requester, buildUrl("/services/data/vXX.X/jobs/ingest/" + jobId),
-                state);
+    public CloseOrAbortJobResponse closeOrAbortJob(String jobId, JobStateEnum state) {
+        String url = buildUrl("/services/data/vXX.X/jobs/ingest/" + jobId);
+
+        CloseOrAbortJobRequest.Builder builder = new CloseOrAbortJobRequest.Builder(state);
+
+        return requester.patch(url, builder.build(), CloseOrAbortJobResponse.class);
     }
 
-    public Executable<Void> uploadJobData(String jobId, String csvContent) {
-        return () -> {
-            String url = buildUrl("/services/data/vXX.X/jobs/ingest/" + jobId + "/batches");
-            return requester.putCsv(url, csvContent, Void.class);
-        };
+    public void uploadJobData(String jobId, String csvContent) {
+        String url = buildUrl("/services/data/vXX.X/jobs/ingest/" + jobId + "/batches");
+
+        requester.putCsv(url, csvContent, Void.class);
     }
 
-    public Executable<Void> deleteJob(String jobId) {
-        return () -> {
-            String url = buildUrl("/services/data/vXX.X/jobs/ingest/" + jobId);
-            return requester.delete(url, null, Void.class);
-        };
+    public void deleteJob(String jobId) {
+        String url = buildUrl("/services/data/vXX.X/jobs/ingest/" + jobId);
+
+        requester.delete(url, null, Void.class);
     }
 
-    public GetAllJobsRequest.Builder getAllJobs() {
-        return new GetAllJobsRequest.Builder(requester, buildUrl("/services/data/vXX.X/jobs/ingest"));
+    public GetAllJobsResponse getAllJobs(Consumer<GetAllJobsRequest.Builder> requestBuilder) {
+        String url = buildUrl("/services/data/vXX.X/jobs/ingest");
+
+        GetAllJobsRequest.Builder builder = new GetAllJobsRequest.Builder();
+        requestBuilder.accept(builder);
+
+        return requester.get(url, builder.buildParameters(), GetAllJobsResponse.class);
     }
 
-    public Executable<GetJobInfoResponse> getJobInfo(String jobId) {
-        return () -> {
-            String url = buildUrl("/services/data/vXX.X/jobs/ingest/" + jobId);
-            return requester.get(url, GetJobInfoResponse.class);
-        };
+    public GetJobInfoResponse getJobInfo(String jobId) {
+        String url = buildUrl("/services/data/vXX.X/jobs/ingest/" + jobId);
+
+        return requester.get(url, GetJobInfoResponse.class);
     }
 
-    public Executable<Reader> getJobSuccessfulRecordResults(String jobId) {
-        return () -> {
-            String url = buildUrl("/services/data/vXX.X/jobs/ingest/" + jobId + "/successfulResults/");
-            return requester.getCsv(url);
-        };
+    public Reader getJobSuccessfulRecordResults(String jobId) {
+        String url = buildUrl("/services/data/vXX.X/jobs/ingest/" + jobId + "/successfulResults/");
+
+        return requester.getCsv(url);
     }
 
-    public Executable<Reader> getJobFailedRecordResults(String jobId) {
-        return () -> {
-            String url = buildUrl("/services/data/vXX.X/jobs/ingest/" + jobId + "/failedResults/");
-            return requester.getCsv(url);
-        };
+    public Reader getJobFailedRecordResults(String jobId) {
+        String url = buildUrl("/services/data/vXX.X/jobs/ingest/" + jobId + "/failedResults/");
+
+        return requester.getCsv(url);
     }
 
-    public Executable<Reader> getJobUnprocessedRecordResults(String jobId) {
-        return () -> {
-            String url = buildUrl("/services/data/vXX.X/jobs/ingest/" + jobId + "/unprocessedrecords/");
-            return requester.getCsv(url);
-        };
+    public Reader getJobUnprocessedRecordResults(String jobId) {
+        String url = buildUrl("/services/data/vXX.X/jobs/ingest/" + jobId + "/unprocessedrecords/");
+
+        return requester.getCsv(url);
     }
 
     private String buildUrl(String path) {

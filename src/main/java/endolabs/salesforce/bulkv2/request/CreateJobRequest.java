@@ -1,7 +1,5 @@
 package endolabs.salesforce.bulkv2.request;
 
-import endolabs.salesforce.bulkv2.RestRequester;
-import endolabs.salesforce.bulkv2.response.CreateJobResponse;
 import endolabs.salesforce.bulkv2.type.ColumnDelimiterEnum;
 import endolabs.salesforce.bulkv2.type.LineEndingEnum;
 import endolabs.salesforce.bulkv2.type.OperationEnum;
@@ -33,12 +31,6 @@ public class CreateJobRequest {
 
     public static class Builder {
 
-        private final RestRequester requester;
-
-        private final String url;
-
-        // parameters
-
         private String object;
 
         private OperationEnum operation;
@@ -51,9 +43,7 @@ public class CreateJobRequest {
 
         private LineEndingEnum lineEnding;
 
-        public Builder(RestRequester requester, String url, String object, OperationEnum operation) {
-            this.requester = requester;
-            this.url = url;
+        public Builder(String object, OperationEnum operation) {
             this.object = object;
             this.operation = operation;
         }
@@ -78,10 +68,8 @@ public class CreateJobRequest {
             return this;
         }
 
-        public CreateJobResponse execute() {
-            CreateJobRequest request = new CreateJobRequest(this);
-
-            return requester.post(url, request, CreateJobResponse.class);
+        public CreateJobRequest build() {
+            return new CreateJobRequest(this);
         }
     }
 }

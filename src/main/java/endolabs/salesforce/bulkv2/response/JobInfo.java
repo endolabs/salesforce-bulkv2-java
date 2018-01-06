@@ -1,5 +1,6 @@
 package endolabs.salesforce.bulkv2.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import endolabs.salesforce.bulkv2.type.ConcurrencyModeEnum;
 import endolabs.salesforce.bulkv2.type.JobStateEnum;
 import endolabs.salesforce.bulkv2.type.JobTypeEnum;
@@ -12,9 +13,9 @@ public class JobInfo {
 
     private Double apiVersion;
 
-    private String columnDelimiter; // "CONMA"
+    private String columnDelimiter;
 
-    private ConcurrencyModeEnum concurrencyMode; // "Parallel"
+    private ConcurrencyModeEnum concurrencyMode;
 
     private String contentType;
 
@@ -39,4 +40,9 @@ public class JobInfo {
     private JobStateEnum state;
 
     private String systemModstamp;
+
+    @JsonIgnore
+    public boolean isFinished() {
+        return state != null && state.isFinished();
+    }
 }

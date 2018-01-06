@@ -1,6 +1,5 @@
 package endolabs.salesforce.bulkv2.response;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -21,9 +20,4 @@ public class GetJobInfoResponse extends JobInfo {
     private Integer numberRecordsProcessed;
 
     private Integer numberRecordsFailed;
-
-    @JsonIgnore
-    public boolean isFinished() {
-        return getState().isFinished();
-    }
 }

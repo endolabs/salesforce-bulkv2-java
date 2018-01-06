@@ -19,28 +19,33 @@ Bulk2Client client = new Bulk2ClientBuilder()
 ### Upload CSV data using a separate request
 
 ```java
-CreateJobResponse createJobResponse = client.createJob("Account", OperationEnum.INSERT)
-        .withContentType("CSV")
-        .execute();
+CreateJobResponse createJobResponse = client.createJob("Account", OperationEnum.INSERT,
+        request => request.withContentType("CSV"));
 String jobId = createJobResponse.getId();
 
 String csv = "Name,Description,NumberOfEmployees\n" +
         "TestAccount1,Description of TestAccount1,30\n" +
         "TestAccount2,Another description,40\n" +
         "TestAccount3,Yet another description,50";
-client.uploadJobData(jobId, csv)
-        .execute();
+client.uploadJobData(jobId, csv);
 
-CloseOrAbortJobResponse closeJobResponse = client.closeOrAbortJob(jobId, JobStateEnum.UPLOAD_COMPLETE)
-        .execute();
+CloseOrAbortJobResponse closeJobResponse = client.closeOrAbortJob(jobId, JobStateEnum.UPLOAD_COMPLETE);
 
 while (true) {
     TimeUnit.SECONDS.sleep(1);
 
-    GetJobInfoResponse jobInfo = client.getJobInfo(jobId).execute();
+    GetJobInfoResponse jobInfo = client.getJobInfo(jobId);
     if (jobInfo.isFinished()) {
         break;
     }
+}
+```
+
+### Retrieve the results of the completed job
+
+```java
+try (BufferedReader reader = new BufferedReader(client.getJobSuccessfulRecordResults(jobId))) {
+    reader.lines().forEach(System.out::println);
 }
 ```
 
