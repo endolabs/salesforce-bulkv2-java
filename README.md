@@ -74,7 +74,22 @@ while (true) {
 }
 ```
 
-### Retrieve the results of the completed job
+### Retrieves all jobs
+
+```java
+GetAllJobsResponse jobs = client.getAllJobs(request -> request.withJobType(JobTypeEnum.BULK_API_2_0));
+for (JobInfo jobInfo : jobs.getRecords()) {
+    System.out.println(jobInfo);
+}
+```
+
+### Retrieve the results of the completed/failed/unprocessed job
+
+Following API returns the results as ``java.io.Reader``
+
+- Get Job Successful Record Results ( ``Bulk2Client#getJobSuccessfulRecordResults`` )
+- Get Job Failed Record Results ( ``Bulk2Client#getJobFailedRecordResults`` )
+- Get Job Unprocessed Record Results ( ``Bulk2Client#getJobUnprocessedRecordResults`` )
 
 ```java
 try (BufferedReader reader = new BufferedReader(client.getJobSuccessfulRecordResults(jobId))) {

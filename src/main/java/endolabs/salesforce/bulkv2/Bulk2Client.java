@@ -62,6 +62,10 @@ public class Bulk2Client {
         requester.delete(url, null, Void.class);
     }
 
+    public GetAllJobsResponse getAllJobs() {
+        return getAllJobs(request -> {});
+    }
+
     public GetAllJobsResponse getAllJobs(Consumer<GetAllJobsRequest.Builder> requestBuilder) {
         String url = buildUrl("/services/data/vXX.X/jobs/ingest");
 
