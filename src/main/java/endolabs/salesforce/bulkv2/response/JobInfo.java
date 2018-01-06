@@ -1,6 +1,7 @@
 package endolabs.salesforce.bulkv2.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import endolabs.salesforce.bulkv2.type.ColumnDelimiterEnum;
 import endolabs.salesforce.bulkv2.type.ConcurrencyModeEnum;
 import endolabs.salesforce.bulkv2.type.JobStateEnum;
 import endolabs.salesforce.bulkv2.type.JobTypeEnum;
@@ -13,7 +14,7 @@ public class JobInfo {
 
     private Double apiVersion;
 
-    private String columnDelimiter;
+    private ColumnDelimiterEnum columnDelimiter;
 
     private ConcurrencyModeEnum concurrencyMode;
 
