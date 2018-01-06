@@ -53,4 +53,8 @@ public enum JobStateEnum {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException(String.valueOf(value)));
     }
+
+    public boolean isFinished() {
+        return !equals(OPEN);
+    }
 }

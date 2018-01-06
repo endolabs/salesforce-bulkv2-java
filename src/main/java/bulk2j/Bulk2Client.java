@@ -36,6 +36,13 @@ public class Bulk2Client {
                 state);
     }
 
+    public Executable<Void> uploadJobData(String jobId, String csvContent) {
+        return () -> {
+            String url = buildUrl("/services/data/vXX.X/jobs/ingest/" + jobId + "/batches");
+            return requester.putCsv(url, csvContent, Void.class);
+        };
+    }
+
     public Executable<Void> deleteJob(String jobId) {
         return () -> {
             String url = buildUrl("/services/data/vXX.X/jobs/ingest/" + jobId);

@@ -11,6 +11,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import okio.ByteString;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -68,6 +69,41 @@ public class RestRequester {
 
             if (response.isSuccessful()) {
                 return Json.decode(responseJson, responseClass);
+            } else {
+                List<ErrorResponse> errors = Json.decode(responseJson, ERRORS_TYPE_REFERENCE);
+                log.error("error : {}", errors);
+                throw new RuntimeException("error.");
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    public <T> T putCsv(String url, String requestData, Class<T> responseClass) {
+        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
+
+        RequestBody requestBody = (requestData == null) ? null : RequestBody.create(CSV_MEDIA_TYPE, ByteString.encodeUtf8(requestData));
+
+        Request request = new Request.Builder()
+                .url(urlBuilder.build())
+                .method("PUT", requestBody)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            ResponseBody responseBody = response.body();
+            if (responseBody == null) {
+                throw new RuntimeException("response body is null.");
+            }
+
+            String responseJson = responseBody.string();
+            log.info("{} response {} {}", "POST", response.code(), responseJson);
+
+            if (response.isSuccessful()) {
+                if (responseJson.isEmpty()) {
+                    return null;
+                } else {
+                    return Json.decode(responseJson, responseClass);
+                }
             } else {
                 List<ErrorResponse> errors = Json.decode(responseJson, ERRORS_TYPE_REFERENCE);
                 log.error("error : {}", errors);

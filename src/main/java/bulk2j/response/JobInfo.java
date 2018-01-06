@@ -1,6 +1,7 @@
 package bulk2j.response;
 
 import bulk2j.type.ConcurrencyModeEnum;
+import bulk2j.type.JobStateEnum;
 import bulk2j.type.JobTypeEnum;
 import bulk2j.type.LineEndingEnum;
 import bulk2j.type.OperationEnum;
@@ -35,7 +36,7 @@ public class JobInfo {
 
     private OperationEnum operation;
 
-    private String state; // "Open"
+    private JobStateEnum state;
 
     private String systemModstamp;
 }
