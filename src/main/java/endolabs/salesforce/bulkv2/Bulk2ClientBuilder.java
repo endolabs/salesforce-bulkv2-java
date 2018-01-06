@@ -55,7 +55,7 @@ public class Bulk2ClientBuilder {
                 .addInterceptor(authorizationInterceptor(token.getAccessToken()))
                 .addInterceptor(httpLoggingInterceptor(HttpLoggingInterceptor.Level.BODY))
                 .build();
-        return new Bulk2Client(client, token.getInstanceUrl());
+        return new Bulk2Client(new RestRequester(client), token.getInstanceUrl());
     }
 
     private AccessToken getAccessTokenUsingPassword(String consumerKey, String consumerSecret, String username, String password) {

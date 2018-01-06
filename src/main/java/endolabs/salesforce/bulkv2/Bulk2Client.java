@@ -11,7 +11,6 @@ import endolabs.salesforce.bulkv2.response.JobInfo;
 import endolabs.salesforce.bulkv2.type.JobStateEnum;
 import endolabs.salesforce.bulkv2.type.OperationEnum;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.OkHttpClient;
 
 import java.io.Reader;
 import java.util.function.Consumer;
@@ -21,16 +20,13 @@ public class Bulk2Client {
 
     private static final String API_VERSION = "v41.0";
 
-    private final OkHttpClient client;
+    private final RestRequester requester;
 
     private final String instanceUrl;
 
-    private final RestRequester requester;
-
-    public Bulk2Client(OkHttpClient client, String instanceUrl) {
-        this.client = client;
+    public Bulk2Client(RestRequester requester, String instanceUrl) {
         this.instanceUrl = instanceUrl;
-        this.requester = new RestRequester(client);
+        this.requester = requester;
     }
 
     public CreateJobResponse createJob(String object, OperationEnum operation, Consumer<CreateJobRequest.Builder> requestBuilder) {
