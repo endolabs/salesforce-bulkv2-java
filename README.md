@@ -25,14 +25,6 @@ Bulk2Client client = new Bulk2ClientBuilder()
         .build();
 ```
 
-### Upload CSV data using a multipart request
-
-For data sets under 20,000 characters, you can upload the data as part of a multipart request when you create the job.
-
-```java
-TBD
-```
-
 ### Upload CSV data using a separate request
 
 ```java
@@ -48,6 +40,30 @@ client.uploadJobData(jobId, csv);
 
 // When using a separate request to upload data, make sure to close the job
 JobInfo closeJobResponse = client.closeJob(jobId);
+
+while (true) {
+    TimeUnit.SECONDS.sleep(1);
+
+    GetJobInfoResponse jobInfo = client.getJobInfo(jobId);
+    if (jobInfo.isFinished()) {
+        break;
+    }
+}
+```
+
+### Upload CSV data using a multipart request
+
+For data sets under 20,000 characters, you can upload the data as part of a multipart request when you create the job.
+
+```java
+String csv = "Name,Description,NumberOfEmployees\n" +
+        "TestAccount1,Description of TestAccount1,30\n" +
+        "TestAccount2,Another description,40\n" +
+        "TestAccount3,Yet another description,50";
+
+CreateJobResponse createJobResponse = client.createJob("Account", OperationEnum.INSERT,
+        request -> request.withContentType("CSV").withContent(csv));
+String jobId = createJobResponse.getId();
 
 while (true) {
     TimeUnit.SECONDS.sleep(1);

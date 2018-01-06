@@ -1,9 +1,12 @@
 package endolabs.salesforce.bulkv2.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import endolabs.salesforce.bulkv2.type.ColumnDelimiterEnum;
 import endolabs.salesforce.bulkv2.type.LineEndingEnum;
 import endolabs.salesforce.bulkv2.type.OperationEnum;
 import lombok.Value;
+
+import java.io.File;
 
 @Value
 public class CreateJobRequest {
@@ -20,6 +23,12 @@ public class CreateJobRequest {
 
     private final OperationEnum operation;
 
+    @JsonIgnore
+    private final String content;
+
+    @JsonIgnore
+    private final File contentFile;
+
     private CreateJobRequest(Builder builder) {
         this.columnDelimiter = builder.columnDelimiter;
         this.contentType = builder.contentType;
@@ -27,6 +36,8 @@ public class CreateJobRequest {
         this.lineEnding = builder.lineEnding;
         this.object = builder.object;
         this.operation = builder.operation;
+        this.content = builder.content;
+        this.contentFile = builder.contentFile;
     }
 
     public static class Builder {
@@ -42,6 +53,10 @@ public class CreateJobRequest {
         private String externalIdFieldName;
 
         private LineEndingEnum lineEnding;
+
+        private String content;
+
+        private File contentFile;
 
         public Builder(String object, OperationEnum operation) {
             this.object = object;
@@ -65,6 +80,16 @@ public class CreateJobRequest {
 
         public Builder withLineEnding(LineEndingEnum lineEnding) {
             this.lineEnding = lineEnding;
+            return this;
+        }
+
+        public Builder withContent(String content) {
+            this.content = content;
+            return this;
+        }
+
+        public Builder withContent(File file) {
+            this.contentFile = contentFile;
             return this;
         }
 

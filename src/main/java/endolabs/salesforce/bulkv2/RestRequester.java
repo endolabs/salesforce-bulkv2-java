@@ -1,6 +1,7 @@
 package endolabs.salesforce.bulkv2;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import endolabs.salesforce.bulkv2.request.CreateJobRequest;
 import endolabs.salesforce.bulkv2.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.HttpUrl;
@@ -37,23 +38,6 @@ public class RestRequester {
         this.client = client;
     }
 
-    public <T> T postMultiPart(String url, Object requestData, Class<T> responseClass) {
-        String sampleAccountsCsv = "Name,Description,NumberOfEmployees\n" +
-                "TestAccount1,Description of TestAccount1,30\n" +
-                "TestAccount2,Another description,40\n" +
-                "TestAccount3,Yet another description,50";
-
-        RequestBody requestBody = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("job", null,
-                        RequestBody.create(JSON_MEDIA_TYPE, Json.encode(requestData)))
-                .addFormDataPart("content", "content",
-                        RequestBody.create(CSV_MEDIA_TYPE, sampleAccountsCsv))
-                .build();
-
-        return request(url, "POST", new HashMap<>(), requestBody, responseClass);
-    }
-
     public <T> T putCsv(String url, String requestData, Class<T> responseClass) {
         RequestBody requestBody = (requestData == null) ? null : RequestBody.create(CSV_MEDIA_TYPE, ByteString.encodeUtf8(requestData));
 
@@ -73,7 +57,26 @@ public class RestRequester {
     }
 
     public <T> T post(String url, Object requestData, Class<T> responseClass) {
-        return requestJson(url, "POST", new HashMap<>(), requestData, responseClass);
+        Object transformedRequest = requestData;
+
+        // TODO: avoid if-statement due to specific request instance
+        if (requestData instanceof CreateJobRequest) {
+            CreateJobRequest createJob = (CreateJobRequest) requestData;
+
+            RequestBody content = createJob.getContent() != null ? RequestBody.create(CSV_MEDIA_TYPE, createJob.getContent())
+                    : createJob.getContentFile() != null ? RequestBody.create(CSV_MEDIA_TYPE, createJob.getContentFile())
+                    : null;
+            if (content != null) {
+                transformedRequest = new MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart("job", null,
+                                RequestBody.create(JSON_MEDIA_TYPE, Json.encode(requestData)))
+                        .addFormDataPart("content", "content", content)
+                        .build();
+            }
+        }
+
+        return requestJson(url, "POST", new HashMap<>(), transformedRequest, responseClass);
     }
 
     public <T> T put(String url, Object requestData, Class<T> responseClass) {
@@ -89,7 +92,9 @@ public class RestRequester {
     }
 
     private <T> T requestJson(String url, String httpMethod, Map<String, String> queryParams, Object requestData, Class<T> responseClass) {
-        RequestBody requestBody = (requestData == null) ? null : RequestBody.create(JSON_MEDIA_TYPE, Json.encode(requestData));
+        RequestBody requestBody = (requestData == null) ? null
+                : (requestData instanceof RequestBody) ? (RequestBody) requestData
+                : RequestBody.create(JSON_MEDIA_TYPE, Json.encode(requestData));
 
         return request(url, httpMethod, queryParams, requestBody, responseClass);
     }
