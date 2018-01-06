@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.util.Arrays;
+import java.util.EnumSet;
 
 /**
  * State of processing for the job.
@@ -21,6 +22,11 @@ public enum JobStateEnum {
     UPLOAD_COMPLETE("UploadComplete"),
 
     /**
+     * The job is being processed by Salesforce. This includes automatic optimized chunking of job data and processing of job operations.
+     */
+    IN_PROGRESS("InProgress"),
+
+    /**
      * The job has been aborted. You can abort a job if you created it or if you have the “Manage Data Integrations” permission.
      */
     ABORTED("Aborted"),
@@ -34,6 +40,8 @@ public enum JobStateEnum {
      * The job has failed. Job data that was successfully processed isn’t rolled back.
      */
     FAILED("Failed");
+
+    private static EnumSet<JobStateEnum> FINISHED_STATUS = EnumSet.of(JOB_COMPLETE, FAILED, ABORTED);
 
     private final String value;
 
@@ -55,6 +63,6 @@ public enum JobStateEnum {
     }
 
     public boolean isFinished() {
-        return !equals(OPEN);
+        return FINISHED_STATUS.contains(this);
     }
 }
