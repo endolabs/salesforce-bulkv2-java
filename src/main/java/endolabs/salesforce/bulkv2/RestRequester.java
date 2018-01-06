@@ -15,6 +15,7 @@ import okio.ByteString;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.io.UncheckedIOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -124,21 +125,24 @@ public class RestRequester {
 
         if (responseClass.isAssignableFrom(Reader.class)) {
             ResponseBody responseBody = unwrap(doRequest(request));
-            return (T) responseBody.charStream(); // NOT close Response
+            return (T) responseBody.charStream(); // close Response/Stream in caller
         }
 
         try (Response response = doRequest(request)) {
             ResponseBody responseBody = unwrap(response);
 
+            String body = responseBody.toString();
+
             if (response.isSuccessful()) {
-                String json = responseBody.string();
-                return (json == null || json.isEmpty()) ? null : Json.decode(json, responseClass);
+                return (body == null || body.isEmpty()) ? null : Json.decode(body, responseClass);
             } else {
-                List<ErrorResponse> errors = Json.decode(responseBody.string(), ERRORS_TYPE_REFERENCE);
-                throw new BulkRequestException(errors);
+                try {
+                    List<ErrorResponse> errors = Json.decode(body, ERRORS_TYPE_REFERENCE);
+                    throw new BulkRequestException(errors);
+                } catch (UncheckedIOException e) {
+                    throw new BulkRequestException("Unknown error: " + body);
+                }
             }
-        } catch (IOException e) {
-            throw new BulkRequestException(e);
         }
     }
 }
