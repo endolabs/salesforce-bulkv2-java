@@ -16,6 +16,10 @@ import java.io.IOException;
 @Slf4j
 public class Bulk2ClientBuilder {
 
+    private static final String TOKEN_REQUEST_ENDPOINT = "https://login.salesforce.com/services/oauth2/token";
+
+    private static final String TOKEN_REQUEST_ENDPOINT_SANDBOX = "https://test.salesforce.com/services/oauth2/token";
+
     private enum GRANT_TYPE {
 
         PASSWORD("password");
@@ -37,6 +41,8 @@ public class Bulk2ClientBuilder {
 
     private String password;
 
+    private boolean useSandbox;
+
     public Bulk2ClientBuilder withPassword(String consumerKey, String consumerSecret, String username, String password) {
         this.grantType = GRANT_TYPE.PASSWORD;
         this.consumerKey = consumerKey;
@@ -44,6 +50,11 @@ public class Bulk2ClientBuilder {
         this.username = username;
         this.password = password;
 
+        return this;
+    }
+
+    public Bulk2ClientBuilder useSandbox() {
+        this.useSandbox = true;
         return this;
     }
 
@@ -60,7 +71,8 @@ public class Bulk2ClientBuilder {
 
     private AccessToken getAccessToken()
             throws IOException {
-        HttpUrl authorizeUrl = HttpUrl.parse("https://login.salesforce.com/services/oauth2/token").newBuilder().build();
+        String endpoint = useSandbox ? TOKEN_REQUEST_ENDPOINT_SANDBOX : TOKEN_REQUEST_ENDPOINT;
+        HttpUrl authorizeUrl = HttpUrl.parse(endpoint).newBuilder().build();
 
         RequestBody requestBody = new FormBody.Builder()
                 .add("grant_type", grantType.value)
