@@ -29,7 +29,8 @@ String csv = "Name,Description,NumberOfEmployees\n" +
         "TestAccount3,Yet another description,50";
 client.uploadJobData(jobId, csv);
 
-CloseOrAbortJobResponse closeJobResponse = client.closeOrAbortJob(jobId, JobStateEnum.UPLOAD_COMPLETE);
+// When using a separate request to upload data, make sure to close the job
+JobInfo closeJobResponse = client.closeJob(jobId);
 
 while (true) {
     TimeUnit.SECONDS.sleep(1);

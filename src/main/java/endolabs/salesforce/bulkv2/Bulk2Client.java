@@ -7,6 +7,7 @@ import endolabs.salesforce.bulkv2.response.CloseOrAbortJobResponse;
 import endolabs.salesforce.bulkv2.response.CreateJobResponse;
 import endolabs.salesforce.bulkv2.response.GetAllJobsResponse;
 import endolabs.salesforce.bulkv2.response.GetJobInfoResponse;
+import endolabs.salesforce.bulkv2.response.JobInfo;
 import endolabs.salesforce.bulkv2.type.JobStateEnum;
 import endolabs.salesforce.bulkv2.type.OperationEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -92,6 +93,16 @@ public class Bulk2Client {
         String url = buildUrl("/services/data/vXX.X/jobs/ingest/" + jobId + "/unprocessedrecords/");
 
         return requester.getCsv(url);
+    }
+
+    // alias
+
+    public JobInfo closeJob(String jobId) {
+        return closeOrAbortJob(jobId, JobStateEnum.UPLOAD_COMPLETE);
+    }
+
+    public JobInfo abortJob(String jobId) {
+        return closeOrAbortJob(jobId, JobStateEnum.ABORTED);
     }
 
     private String buildUrl(String path) {
