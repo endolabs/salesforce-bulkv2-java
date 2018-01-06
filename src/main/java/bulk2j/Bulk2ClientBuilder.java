@@ -21,24 +21,12 @@ public class Bulk2ClientBuilder {
 
     private static final String TOKEN_REQUEST_ENDPOINT_SANDBOX = "https://test.salesforce.com/services/oauth2/token";
 
-    private String consumerKey;
-
-    private String consumerSecret;
-
-    private String username;
-
-    private String password;
-
     private boolean useSandbox;
 
     private Supplier<AccessToken> accessTokenSupplier;
 
     public Bulk2ClientBuilder withPassword(String consumerKey, String consumerSecret, String username, String password) {
-        this.consumerKey = consumerKey;
-        this.consumerSecret = consumerSecret;
-        this.username = username;
-        this.password = password;
-        this.accessTokenSupplier = () -> this.getAccessTokenUsingPassword();
+        this.accessTokenSupplier = () -> this.getAccessTokenUsingPassword(consumerKey, consumerSecret, username, password);
 
         return this;
     }
@@ -70,7 +58,7 @@ public class Bulk2ClientBuilder {
         return new Bulk2Client(client, token.getInstanceUrl());
     }
 
-    private AccessToken getAccessTokenUsingPassword() {
+    private AccessToken getAccessTokenUsingPassword(String consumerKey, String consumerSecret, String username, String password) {
         String endpoint = useSandbox ? TOKEN_REQUEST_ENDPOINT_SANDBOX : TOKEN_REQUEST_ENDPOINT;
         HttpUrl authorizeUrl = HttpUrl.parse(endpoint).newBuilder().build();
 
