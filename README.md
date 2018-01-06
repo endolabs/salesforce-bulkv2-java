@@ -16,6 +16,23 @@ Bulk2Client client = new Bulk2ClientBuilder()
         .build();
 ```
 
+If you’re verifying authentication on a sandbox organization, simply add ``useSandbox``.
+
+```java
+Bulk2Client client = new Bulk2ClientBuilder()
+        .withPassword("<consumer key>", "<consumer secret>", "<username>", "<password>"
+        .useSandbox()
+        .build();
+```
+
+### Upload CSV data using a multipart request
+
+For data sets under 20,000 characters, you can upload the data as part of a multipart request when you create the job.
+
+```java
+TBD
+```
+
 ### Upload CSV data using a separate request
 
 ```java
