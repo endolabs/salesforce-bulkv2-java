@@ -20,7 +20,7 @@ Bulk2Client client = new Bulk2ClientBuilder()
 
 ```java
 CreateJobResponse createJobResponse = client.createJob("Account", OperationEnum.INSERT,
-        request => request.withContentType("CSV"));
+        request -> request.withContentType("CSV"));
 String jobId = createJobResponse.getId();
 
 String csv = "Name,Description,NumberOfEmployees\n" +
