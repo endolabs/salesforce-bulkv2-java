@@ -134,6 +134,7 @@ public class RestRequester {
             String body = null;
             try {
                 body = responseBody.string();
+                responseBody.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
