@@ -131,7 +131,12 @@ public class RestRequester {
         try (Response response = doRequest(request)) {
             ResponseBody responseBody = unwrap(response);
 
-            String body = responseBody.toString();
+            String body = null;
+            try {
+                body = responseBody.string();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             if (response.isSuccessful()) {
                 return (body == null || body.isEmpty()) ? null : Json.decode(body, responseClass);
@@ -145,4 +150,5 @@ public class RestRequester {
             }
         }
     }
+
 }
